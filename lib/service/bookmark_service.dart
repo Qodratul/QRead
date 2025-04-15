@@ -1,24 +1,35 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class BookmarkService {
-  static const String _lastReadKey = 'last_read';
+  static const String _lastReadKey = 'lastRead';
 
   Future<void> saveLastRead(int surahNumber, String surahName, int ayahNumber) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_lastReadKey, '$surahNumber|$surahName|$ayahNumber');
+
+    final lastReadData = {
+      'surahNumber': surahNumber,
+      'surahName': surahName,
+      'ayahNumber': ayahNumber,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    };
+
+    await prefs.setString(_lastReadKey, jsonEncode(lastReadData));
   }
 
   Future<Map<String, dynamic>?> getLastRead() async {
     final prefs = await SharedPreferences.getInstance();
-    final lastRead = prefs.getString(_lastReadKey);
-    if (lastRead != null) {
-      final parts = lastRead.split('|');
-      return {
-        'surahNumber': int.parse(parts[0]),
-        'surahName': parts[1],
-        'ayahNumber': int.parse(parts[2]),
-      };
+    final String? lastReadJson = prefs.getString(_lastReadKey);
+
+    if (lastReadJson == null) {
+      return null;
     }
-    return null;
+
+    return jsonDecode(lastReadJson) as Map<String, dynamic>;
+  }
+
+  Future<void> clearLastRead() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_lastReadKey);
   }
 }
