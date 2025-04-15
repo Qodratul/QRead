@@ -1,0 +1,2 @@
+C:/Users/MyBook Z Series/AndroidStudioProjects/app_alquran/android/app/.cxx/Debug/4x6pf24j/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/MyBook Z Series/AndroidStudioProjects/app_alquran/android/app/.cxx/Debug/4x6pf24j/x86_64/CMakeFiles/rebuild_cache.dir

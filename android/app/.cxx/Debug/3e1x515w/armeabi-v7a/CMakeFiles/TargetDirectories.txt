@@ -1,0 +1,2 @@
+C:/Users/MyBook Z Series/AndroidStudioProjects/app_alquran/android/app/.cxx/Debug/3e1x515w/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/MyBook Z Series/AndroidStudioProjects/app_alquran/android/app/.cxx/Debug/3e1x515w/armeabi-v7a/CMakeFiles/rebuild_cache.dir
