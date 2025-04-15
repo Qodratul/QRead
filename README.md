@@ -39,6 +39,7 @@ cd qread
 # Jalankan sesuai dengan tools (contoh Flutter)
 flutter pub get
 flutter run
+```
 
 ---
 
