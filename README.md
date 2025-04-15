@@ -31,10 +31,10 @@ QuranRead adalah aplikasi baca Al-Quran digital yang modern dan mudah digunakan.
 
 ```bash
 # Clone repository
-git clone https://github.com/username/qread.git
+git clone https://github.com/username/QuranRead.git
 
 # Masuk ke direktori proyek
-cd qread
+cd QuranRead
 
 # Jalankan sesuai dengan tools (contoh Flutter)
 flutter pub get
