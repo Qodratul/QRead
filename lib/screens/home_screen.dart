@@ -1,18 +1,19 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
-import '../service/apiQuran.dart';
 import '../service/bookmark_service.dart';
+import '../service/apiQuran.dart';
 import '../main.dart';
+import '../service/notification_service.dart';
 import 'ayah_screen.dart';
 
-class QuranScreen extends StatefulWidget {
-  const QuranScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  QuranScreenState createState() => QuranScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class QuranScreenState extends State<QuranScreen> with SingleTickerProviderStateMixin {
+class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
   final BookmarkService _bookmarkService = BookmarkService();
   List<dynamic> _allSurahs = [];
@@ -103,7 +104,7 @@ class QuranScreenState extends State<QuranScreen> with SingleTickerProviderState
           backgroundColor: theme.appBarTheme.backgroundColor,
           elevation: 0,
           title: Text(
-            "Al-Quran",
+            "QuranRead",
             style: TextStyle(
               color: theme.appBarTheme.titleTextStyle?.color,
               fontSize: 22,
@@ -140,6 +141,27 @@ class QuranScreenState extends State<QuranScreen> with SingleTickerProviderState
                 ),
               ),
             ),
+            //Ini adalah tombol notifikasi untuk pengetesan
+            // Padding(
+            //   padding: const EdgeInsets.only(right: 16.0),
+            //   child: IconButton(
+            //     icon: Icon(
+            //       Icons.notifications,
+            //       color: theme.appBarTheme.iconTheme?.color,
+            //       size: 26,
+            //     ),
+            //     onPressed: () {
+            //       // Tampilkan notifikasi uji
+            //       NotificationService().showTestNotification();
+            //       ScaffoldMessenger.of(context).showSnackBar(
+            //         const SnackBar(
+            //           content: Text('Notifikasi uji dikirim!'),
+            //           duration: Duration(seconds: 2),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
           ],
         ),
         body: _isLoading
@@ -413,7 +435,7 @@ class QuranScreenState extends State<QuranScreen> with SingleTickerProviderState
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: 'AlQuran',
+                                  fontFamily: 'Surah',
                                   color: isDarkMode
                                       ? colorScheme.primary
                                       : colorScheme.primary,

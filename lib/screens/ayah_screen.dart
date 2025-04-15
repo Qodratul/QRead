@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../service/apiQuran.dart';
 import '../service/bookmark_service.dart';
 import '../main.dart';
+import '../service/notification_service.dart';
 
 class AyahScreen extends StatefulWidget {
   final int surahNumber;
@@ -62,29 +63,24 @@ class _AyahScreenState extends State<AyahScreen> {
     setState(() {
       _isLoading = true;
     });
-
     try {
       final ayahs = await _apiQuran.getAyahs(widget.surahNumber);
       final translations = await _apiQuran.getTranslations(widget.surahNumber, _selectedTranslation);
       final audios = await _apiQuran.getAudios(widget.surahNumber);
-
       // Remove bismillah from beginning except for surah Al-Fatihah
       if (widget.surahNumber != 1 && ayahs.isNotEmpty) {
         ayahs[0]['text'] = ayahs[0]['text'].replaceFirst(
             'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', '');
       }
-
       // Add audio URLs to ayahs
       for (int i = 0; i < ayahs.length; i++) {
         ayahs[i]['audio'] = audios[i]['audio'];
       }
-
       setState(() {
         _ayahs = ayahs;
         _translations = translations;
         _isLoading = false;
       });
-
     } catch (e) {
       print('Error: $e');
       setState(() {
@@ -129,21 +125,16 @@ class _AyahScreenState extends State<AyahScreen> {
     while (_isPlayingAll && _currentAudioIndex != null && _currentAudioIndex! < _ayahs.length) {
       final index = _currentAudioIndex!;
       final audioUrl = _ayahs[index]['audio'];
-
       setState(() {
         _currentlyPlayingAyah = index;
       });
-
       try {
         await _audioPlayer.play(UrlSource(audioUrl));
         await _audioPlayer.onPlayerComplete.first;
-
         if (!_isPlayingAll) break;
-
         setState(() {
           _currentAudioIndex = index + 1;
         });
-
         await Future.delayed(const Duration(milliseconds: 300));
       } catch (e) {
         print('Audio error: $e');
@@ -152,7 +143,6 @@ class _AyahScreenState extends State<AyahScreen> {
         });
       }
     }
-
     await _stopAllAudio();
   }
 
@@ -162,6 +152,10 @@ class _AyahScreenState extends State<AyahScreen> {
       widget.surahName,
       ayahNumber,
     );
+
+    // Reschedule notifications with updated bookmark data
+    final notificationService = NotificationService();
+    await notificationService.rescheduleNotificationsIfNeeded();
 
     // Show feedback to user
     if (mounted) {
@@ -194,7 +188,6 @@ class _AyahScreenState extends State<AyahScreen> {
         return _ayahs.sublist(bookmarkIndex);
       }
     }
-
     return _ayahs;
   }
 
@@ -342,7 +335,6 @@ class _AyahScreenState extends State<AyahScreen> {
                   ],
                 ),
               ),
-
             // Ayah list
             Expanded(
               child: ListView.builder(
