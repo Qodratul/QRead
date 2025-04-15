@@ -1,7 +1,7 @@
-# Qread (QuranRead)
+# QuranRead
 **Aplikasi simpel dan nyaman untuk baca Al-Quran di mana saja.**
 
-Qread adalah aplikasi baca Al-Quran digital yang modern dan mudah digunakan. Cocok buat kamu yang pengen tetap dekat dengan Al-Quran setiap hari.
+QuranRead adalah aplikasi baca Al-Quran digital yang modern dan mudah digunakan. Cocok buat kamu yang pengen tetap dekat dengan Al-Quran setiap hari.
 
 ---
 
