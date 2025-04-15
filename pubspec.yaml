@@ -39,6 +39,7 @@ dependencies:
   flutter_islamic_icons: ^1.0.2
   audioplayers: ^6.1.0
   shared_preferences: ^2.0.15
+  provider: ^6.1.4
 
 dev_dependencies:
   flutter_test:
