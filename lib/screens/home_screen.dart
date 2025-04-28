@@ -4,7 +4,9 @@ import '../service/bookmark_service.dart';
 import '../service/apiQuran.dart';
 import '../main.dart';
 import '../service/notification_service.dart';
+import '../service/auth_service.dart';
 import 'ayah_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
   final BookmarkService _bookmarkService = BookmarkService();
+  final AuthService _authService = AuthService();
   List<dynamic> _allSurahs = [];
   List<dynamic> _filteredSurahs = [];
   Map<String, dynamic>? _lastRead;
@@ -90,12 +93,95 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     });
   }
 
+  void _showProfileOptions(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final user = _authService.currentUser;
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.person, color: colorScheme.primary),
+                title: Text(
+                  'Profile',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.tertiary,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context); // Close the bottom sheet
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfileScreen()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.exit_to_app, color: Colors.red),
+                title: Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.tertiary,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context); // Close the bottom sheet
+                  _showLogoutConfirmation(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showLogoutConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout Confirmation'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _authService.signOut();
+                // Navigation will be handled by the auth state listener
+              },
+              child: const Text('Logout', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.isDarkMode;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final user = _authService.currentUser;
 
     return SafeArea(
       child: Scaffold(
@@ -103,6 +189,37 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         appBar: AppBar(
           backgroundColor: theme.appBarTheme.backgroundColor,
           elevation: 0,
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () => _showProfileOptions(context),
+              child: CircleAvatar(
+                backgroundColor: colorScheme.primary.withOpacity(0.2),
+                child: user?.photoURL != null && user!.photoURL!.isNotEmpty
+                    ? ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image.network(
+                    user.photoURL!,
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        Icons.person,
+                        color: colorScheme.primary,
+                        size: 24,
+                      );
+                    },
+                  ),
+                )
+                    : Icon(
+                  Icons.person,
+                  color: colorScheme.primary,
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
           title: Text(
             "QuranRead",
             style: TextStyle(
@@ -141,27 +258,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 ),
               ),
             ),
-            //Ini adalah tombol notifikasi untuk pengetesan
-            // Padding(
-            //   padding: const EdgeInsets.only(right: 16.0),
-            //   child: IconButton(
-            //     icon: Icon(
-            //       Icons.notifications,
-            //       color: theme.appBarTheme.iconTheme?.color,
-            //       size: 26,
-            //     ),
-            //     onPressed: () {
-            //       // Tampilkan notifikasi uji
-            //       NotificationService().showTestNotification();
-            //       ScaffoldMessenger.of(context).showSnackBar(
-            //         const SnackBar(
-            //           content: Text('Notifikasi uji dikirim!'),
-            //           duration: Duration(seconds: 2),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
           ],
         ),
         body: _isLoading

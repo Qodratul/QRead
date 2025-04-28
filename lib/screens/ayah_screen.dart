@@ -102,7 +102,7 @@ class _AyahScreenState extends State<AyahScreen> {
     if (_isPlayingAll) {
       await _stopAllAudio();
     } else {
-      await _stopAllAudio(); // Make sure previous audio is stopped
+      await _stopAllAudio(); // Memastikan Audio sebelumnya dihentikan
       setState(() {
         _isPlayingAll = true;
         _currentAudioIndex = startIndex;
@@ -153,11 +153,11 @@ class _AyahScreenState extends State<AyahScreen> {
       ayahNumber,
     );
 
-    // Reschedule notifications with updated bookmark data
+    // Notifaksi mengikuti data dari bookmark
     final notificationService = NotificationService();
     await notificationService.rescheduleNotificationsIfNeeded();
 
-    // Show feedback to user
+    // Show feedback ke user
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -199,7 +199,7 @@ class _AyahScreenState extends State<AyahScreen> {
       );
 
       if (bookmarkIndex >= 0) {
-        // Start exactly at the bookmarked ayah
+        // Memastikan muncul di bookmark
         return _translations.sublist(bookmarkIndex);
       }
     }
@@ -347,7 +347,7 @@ class _AyahScreenState extends State<AyahScreen> {
                   final translation = _displayedTranslations[displayIndex];
                   final ayahNumber = ayah['numberInSurah'];
 
-                  // Calculate original index for audio playback
+                  // Index untuk audio playback
                   final originalIndex = _ayahs.indexWhere(
                           (originalAyah) => originalAyah['numberInSurah'] == ayahNumber
                   );
