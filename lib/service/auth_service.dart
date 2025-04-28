@@ -5,7 +5,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  // Get current user
+  // Get user terbaru
   User? get currentUser => _auth.currentUser;
 
   // Stream to track authentication state changes
@@ -49,7 +49,7 @@ class AuthService {
     }
   }
 
-  // Check if user is logged in
+  // Cek jika user sudah login
   bool isLoggedIn() {
     return currentUser != null;
   }

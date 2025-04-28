@@ -20,7 +20,6 @@ class LoginScreenState extends State<LoginScreen> {
     try {
       final userCredential = await _authService.signInWithGoogle();
       if (userCredential != null && mounted) {
-        // Navigation will be handled by the auth state listener in main.dart
       }
     } catch (e) {
       if (mounted) {
@@ -56,10 +55,10 @@ class LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // App Logo
-                  Icon(
-                    Icons.menu_book_rounded,
-                    size: 120,
-                    color: colorScheme.primary,
+                  Image.asset(
+                    'assets/icons/logo.png',
+                    width: 150,
+                    height: 150,
                   ),
                   const SizedBox(height: 24),
 
@@ -76,14 +75,14 @@ class LoginScreenState extends State<LoginScreen> {
 
                   // App Description
                   Text(
-                    'Read, learn and reflect on the Holy Quran',
+                    'Connect with the Quran, anytime, anywhere',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
                       color: colorScheme.tertiary.withOpacity(0.8),
                     ),
                   ),
-                  const SizedBox(height: 72),
+                  const SizedBox(height: 35),
 
                   // Google Sign-In Button
                   _isLoading

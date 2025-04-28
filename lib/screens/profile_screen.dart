@@ -128,7 +128,6 @@ class ProfileScreen extends StatelessWidget {
               onPressed: () async {
                 Navigator.of(context).pop();
                 await _authService.signOut();
-                // Navigation will be handled by the auth state listener
               },
               child: const Text('Logout', style: TextStyle(color: Colors.red)),
             ),
