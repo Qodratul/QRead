@@ -50,15 +50,12 @@ class NotificationService {
       sound: true,
     );
 
-    // Check and schedule notifications if needed
+    // Mengecek dan menjadwalkan notifikasi jika diperlukan
     await _checkAndScheduleNotifications();
   }
 
   void _onNotificationTapped(NotificationResponse response) {
-    // Handle notification tap - could navigate to the specific surah and ayah
     print('Notification tapped: ${response.payload}');
-    // This method will be called when user taps on notification
-    // You can add navigation logic here
   }
 
   Future<void> _checkAndScheduleNotifications() async {
@@ -66,7 +63,7 @@ class NotificationService {
     final String? lastNotificationDate = prefs.getString(_notificationKey);
     final String today = DateTime.now().toIso8601String().split('T')[0];
 
-    // If notifications haven't been scheduled today, schedule them
+    //  Jika notifikasi belum dijadwalkan, maka di jadwalkan
     if (lastNotificationDate != today) {
       await _scheduleRandomNotifications();
       await prefs.setString(_notificationKey, today);
@@ -74,25 +71,25 @@ class NotificationService {
   }
 
   Future<void> _scheduleRandomNotifications() async {
-    // Cancel any existing notifications
+    // Cancel seluruh notifikasi yang ada
     await _flutterLocalNotificationsPlugin.cancelAll();
 
-    // Get the bookmark data
+    // Get data bookmark terakhir
     final bookmarkData = await _bookmarkService.getLastRead();
     if (bookmarkData == null) {
-      return; // No bookmark to remind about
+      return;
     }
 
     final surahName = bookmarkData['surahName'];
     final ayahNumber = bookmarkData['ayahNumber'];
 
-    // Generate two random times for today's notifications
+    // Waktu random untuk notifikasi di hari ini
     final now = DateTime.now();
     final DateTime morning = DateTime(
         now.year,
         now.month,
         now.day,
-        8 + _random.nextInt(4), // Between 8 AM and 12 PM
+        8 + _random.nextInt(4), // Antara 8 AM dan 12 PM
         _random.nextInt(60)
     );
 
@@ -100,11 +97,11 @@ class NotificationService {
         now.year,
         now.month,
         now.day,
-        16 + _random.nextInt(6), // Between 4 PM and 10 PM
+        16 + _random.nextInt(6), // Antara 4 PM dan 10 PM
         _random.nextInt(60)
     );
 
-    // Schedule morning notification if it's in the future
+    // Jadwal notifikasi untuk pagi
     if (morning.isAfter(now)) {
       await _scheduleNotification(
         id: 1,
@@ -115,7 +112,7 @@ class NotificationService {
       );
     }
 
-    // Schedule evening notification
+    // Jadwal notifikasi untuk malam
     if (evening.isAfter(now)) {
     await _scheduleNotification(
       id: 2,

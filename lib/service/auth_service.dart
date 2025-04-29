@@ -8,21 +8,20 @@ class AuthService {
   // Get user terbaru
   User? get currentUser => _auth.currentUser;
 
-  // Stream to track authentication state changes
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   // Sign in with Google
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      // Trigger the authentication flow
+      // Trigger the authentication
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
-        // User canceled the sign-in flow
+        // User cancel the sign-in
         return null;
       }
 
-      // Obtain the auth details from the request
+      // Menerima authentication details
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
       // Create a new credential
@@ -31,7 +30,7 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      // Once signed in, return the UserCredential
+      // Ketika sudah sign in, return the UserCredential
       return await _auth.signInWithCredential(credential);
     } catch (e) {
       print('Error signing in with Google: $e');

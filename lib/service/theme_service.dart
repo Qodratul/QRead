@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ThemeService {
   static const String _themeKey = 'isDarkMode';
 
-  // Islamic theme colors
+  // Themes Colors
   static final lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: const Color(0xFFF5E6CA), // Cream
@@ -66,15 +66,15 @@ class ThemeService {
     ),
   );
 
-  // Save theme preference
+  // Save theme
   static Future<void> saveThemePreference(bool isDarkMode) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_themeKey, isDarkMode);
   }
 
-  // Get saved theme preference
+  // Get saved theme
   static Future<bool> getThemePreference() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_themeKey) ?? false; // Default to light mode
+    return prefs.getBool(_themeKey) ?? false; // Default back to light mode
   }
 }
